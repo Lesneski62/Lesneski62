@@ -1,0 +1,28 @@
+                   # 收集需要下落的动物的信息  
+                    for m in range(i, self.row - 1, -1):  
+                        if self.animal[m - 1][j] != -1:  
+                            x, y = self.rc_xy(m - 1, j)  
+                            brick_position.append((x, y))  
+                            animal = Element(Element.animals[self.animal[m - 1][j]], (x, y))  
+                            fall_animal_list.append(animal)  
+                            self.animal[m][j] = self.animal[m - 1][j]  
+                        else:  
+                            self.animal[m][j] = randint(0, 5)  
+                            break  
+
+            # 动物下落实现  
+            while speed != [0, 0] and fall_animal_list:  
+                for position in brick_position:  
+                    self.draw_brick(position[0], position[1])  
+                for animal_sprite in fall_animal_list:  
+                    animal_sprite.move(speed)  
+                    animal_sprite.draw(self.screen)  
+                    speed = animal_sprite.speed  
+                pygame.display.flip()  
+
+    def judge_next(self, tp, score):  
+        """判断是否达到下一关。"""  
+        if tp == 1:  # 通过  
+            self.load_fns_window(score)  
+        elif tp == -1:  # 失败  
+            self.load_fail_window()  
