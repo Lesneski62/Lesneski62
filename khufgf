@@ -1,0 +1,86 @@
+    JLabel jLabel1 = new JLabel();
+    JLabel jLabel2 = new JLabel();
+    JLabel jLabel3 = new JLabel();
+    JLabel jLabel4 = new JLabel();
+    JLabel jLabel5 = new JLabel();
+    JLabel jLabel6 = new JLabel();
+    JButton btn_add = new JButton();
+    JButton btn_exit = new JButton();
+    JComboBox jcb_sno = new JComboBox();
+    JComboBox jcb_cname = new JComboBox();
+    JTextField tsname = new JTextField();
+    JTextField tcno = new JTextField();
+    JTextField tcteacher = new JTextField();
+    JTextField tgrade = new JTextField();
+    StudentManager sm=new StudentManager();        //初始化中定义学生管理对象
+    CourseManager cm=new CourseManager();          //初始化中定义课程管理对象
+    public static void main(String[] args) {Add_gradePanel sm = new Add_gradePanel();
+    }
+    public void jcb_sno_itemStateChanged(ItemEvent e) {
+        //调用按学号查询学生信息方法
+        tsname.setText(sm.findOneStudent(jcb_sno.getSelectedItem().toString()));
+    }
+    public void jcb_cname_itemStateChanged(ItemEvent e) {
+        //调用按课程名称查询课程信息方法
+        Course c = cm.findOneCourse(jcb_cname.getSelectedItem().toString());
+        tcno.setText(c.getCno());
+        tcteacher.setText(c.getCteacher());
+    }
+    public void btn_exit_actionPerformed(ActionEvent e) {
+        this.setVisible(false);
+    }
+    public void btn_add_actionPerformed(ActionEvent e) {
+        String sno = (String) jcb_sno.getSelectedItem();
+        String cno = tcno.getText();
+        String grade = tgrade.getText();
+        Grade g = new Grade();
+        g.setSno(sno);
+        g.setCno(cno);
+        g.setGrade(grade);
+        GradeManager gm = new GradeManager();
+        int i=gm.addGrade(g);                      //调用添加成绩方法
+        if (i > 0) {
+            JOptionPane.showMessageDialog(this, "添加成功！", "提示信息",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "学生与实际选课科目不符，请核对！",
+                    "提示信息", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+class addcjPanel1_btn_add_actionAdapter implements ActionListener {
+    private Add_gradePanel adaptee;
+    addcjPanel1_btn_add_actionAdapter(Add_gradePanel adaptee) {
+        this.adaptee = adaptee;
+    }
+    public void actionPerformed(ActionEvent e) {
+        adaptee.btn_add_actionPerformed(e);
+    }
+}
+class addcjPanel1_btn_exit_actionAdapter implements ActionListener {
+    private Add_gradePanel adaptee;
+    addcjPanel1_btn_exit_actionAdapter(Add_gradePanel adaptee) {
+        this.adaptee = adaptee;
+    }
+    public void actionPerformed(ActionEvent e) {
+        adaptee.btn_exit_actionPerformed(e);
+    }
+}
+class addcjPanel1_jcb_cname_itemAdapter implements ItemListener {
+    private Add_gradePanel adaptee;
+    addcjPanel1_jcb_cname_itemAdapter(Add_gradePanel adaptee) {
+        this.adaptee = adaptee;
+    }
+    public void itemStateChanged(ItemEvent e) {
+        adaptee.jcb_cname_itemStateChanged(e);
+    }
+}
+class addcjPanel1_jcb_sno_itemAdapter implements ItemListener {
+    private Add_gradePanel adaptee;
+    addcjPanel1_jcb_sno_itemAdapter(Add_gradePanel adaptee) {
+        this.adaptee = adaptee;
+    }
+    public void itemStateChanged(ItemEvent e) {
+        adaptee.jcb_sno_itemStateChanged(e);
+    }
+}
